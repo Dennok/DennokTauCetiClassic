@@ -34,24 +34,23 @@
 	..()
 	if(istype(W,/obj/item/weapon/cable_coil))
 		var/obj/item/weapon/cable_coil/CC = W
-		if(CC.amount < 5)
-			to_chat(user, "\b There is not enough wire in this coil. You need 5 lengths.")
+
+		var/list/resources_to_use = list()
+		resources_to_use[W] = 5
+		resources_to_use[src] = 1
+		if(!use_multi(user, resources_to_use))
 			return
-		if(!src.use(1))
-			return
-		if(!CC.use(5))
-			return
+
 		to_chat(user, "\blue You attach wire to the [name].")
 		new /obj/item/stack/light_w(user.loc)
 	else if(istype(W, /obj/item/stack/rods))
-		var/obj/item/stack/rods/V  = W
-		if(V.amount < 1)
-			to_chat(user, "\b There is not enough rods.")
+
+		var/list/resources_to_use = list()
+		resources_to_use[V] = 1
+		resources_to_use[src] = 1
+		if(!use_multi(user, resources_to_use))
 			return
-		if(!src.use(1))
-			return
-		if(!V.use(1))
-			return
+
 		var/obj/item/stack/sheet/rglass/RG = new (user.loc)
 		RG.add_fingerprint(user)
 		RG.add_to_stacks(user)
@@ -376,13 +375,12 @@
 /obj/item/stack/sheet/glass/phoronglass/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/stack/rods))
-		var/obj/item/stack/rods/V  = W
-		if(V.amount < 1)
+		var/list/resources_to_use = list()
+		resources_to_use[W] = 1
+		resources_to_use[src] = 1
+		if(!use_multi(user, resources_to_use))
 			return
-		if(!src.use(1))
-			return
-		if(!V.use(1))
-			return
+
 		var/obj/item/stack/sheet/glass/phoronrglass/RG = new (user.loc)
 		RG.add_fingerprint(user)
 		RG.add_to_stacks(user)

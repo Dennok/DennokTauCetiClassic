@@ -161,6 +161,18 @@
 			qdel(src)
 		return 1
 
+/obj/item/proc/use_multi(mob/user, list/res_list)
+	. = TRUE
+	for(var/x in res_list)
+		var/obj/item/stack/S = x
+		if(S.amount < res_list[x])
+			. = FALSE
+			to_chat(user, "There is not enough [S.name]. You need [res_list[x]].")
+			break
+	if(.)
+		for(var/x in res_list)
+			var/obj/item/stack/S = x
+			S.use(res_list[x])
 
 /obj/item/stack/proc/add_to_stacks(mob/usr)
 	var/obj/item/stack/oldsrc = src

@@ -21,11 +21,10 @@
 		new/obj/item/stack/sheet/glass(user.loc)
 
 	if(istype(O,/obj/item/stack/sheet/metal))
-		var/obj/item/stack/sheet/metal/M = O
-		if(M.amount < 1)
+		var/list/resources_to_use = list()
+		resources_to_use[O] = 1
+		resources_to_use[src] = 1
+		if(!use_multi(user, resources_to_use))
 			return
-		if(!src.use(1))
-			return
-		if(!M.use(1))
-			return
+
 		new/obj/item/stack/tile/light(user.loc)
