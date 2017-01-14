@@ -33,7 +33,6 @@
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W,/obj/item/weapon/cable_coil))
-		var/obj/item/weapon/cable_coil/CC = W
 
 		var/list/resources_to_use = list()
 		resources_to_use[W] = 5
@@ -46,7 +45,7 @@
 	else if(istype(W, /obj/item/stack/rods))
 
 		var/list/resources_to_use = list()
-		resources_to_use[V] = 1
+		resources_to_use[W] = 1
 		resources_to_use[src] = 1
 		if(!use_multi(user, resources_to_use))
 			return
