@@ -49,7 +49,7 @@
 				return 1
 	else
 		if(amount < 2)
-			to_chat(user, "<span class='notice'>You need at least two rods to do this.</span>")
+			to_chat(user, "<span class='danger'>You need at least two rods to do this.</span>")
 			return
 		to_chat(usr, "<span class='notice'>Assembling grille...</span>")
 		if (!do_after(usr, 10, target = usr))

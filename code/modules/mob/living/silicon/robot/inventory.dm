@@ -193,7 +193,8 @@
 //cycle_modules() - Cycles through the list of selected modules.
 /mob/living/silicon/robot/proc/cycle_modules()
 	var/slot_start = get_selected_module()
-	if(slot_start) deselect_module(slot_start) //Only deselect if we have a selected slot.
+	if(slot_start)
+		deselect_module(slot_start) //Only deselect if we have a selected slot.
 
 	var/slot_num = slot_start + 1
 
@@ -202,7 +203,8 @@
 			select_module(slot_num)
 			return
 		slot_num++
-		if(slot_num > 3) return
+		if(slot_num > 3)
+			return
 
 	return
 
