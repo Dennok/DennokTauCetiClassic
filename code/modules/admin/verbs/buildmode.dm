@@ -203,10 +203,9 @@ obj/effect/bmode/buildholder/New()
 				return 1
 			if(2)
 				copycat = null
-				objholder = text2path(input(usr,"Enter typepath:" ,"Typepath","/obj/structure/closet"))
+				objholder = easyTypeSelector()
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
-					alert("That path is not allowed.")
 				else
 					if(ismob(objholder) && !check_rights(R_DEBUG,0))
 						objholder = /obj/structure/closet
