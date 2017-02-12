@@ -85,20 +85,20 @@
 /obj/effect/bmode/buildhelp/Click()
 	var/help_message = "Wrong buildmode mode."
 	switch(master.cl.buildmode)
-		if(1)
+		if(1) // Basic Build
 			help_message = {"<span class='notice'>
-			***********************************************************</span>")
-			Click and drag to do a fill operation</span>")
-			Left Mouse Button        = Construct / Upgrade</span>")
-			Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
-			Left Mouse Button + ctrl = R-Window</span>")
-			Left Mouse Button + alt  = Airlock</span>")
+			***********************************************************
+			Click and drag to do a fill operation
+			Left Mouse Button        = Construct / Upgrade
+			Right Mouse Button       = Deconstruct / Delete / Downgrade
+			Left Mouse Button + ctrl = R-Window
+			Left Mouse Button + alt  = Airlock
 
-			Use the button in the upper left corner to</span>")
-			change the direction of built objects.</span>")
-			***********************************************************</span>")
+			Use the button in the upper left corner to
+			change the direction of built objects.
+			***********************************************************
 			</span>"}
-		if(2)
+		if(2) // Adv. Build
 			help_message = {"<span class='notice'>
 			***********************************************************
 			Click and drag to do a fill operation
@@ -113,22 +113,53 @@
 			change the direction of built objects.
 			***********************************************************
 			</span>"}
-		if(3)
+		if(3) // Edit
 			help_message = {"<span class='notice'>
-			***********************************************************</span>")
-			Click and drag to do a mass edit operation</span>")
-			Right Mouse Button on buildmode button = Select var(type) & value</span>")
-			Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
-			Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
-			***********************************************************</span>")
+			***********************************************************
+			Click and drag to do a mass edit operation
+			Right Mouse Button on buildmode button = Select var(type) & value
+			Left Mouse Button on turf/obj/mob      = Set var(type) & value
+			Right Mouse Button on turf/obj/mob     = Reset var's value
+			***********************************************************
 			</span>"}
-		if(4)
+		if(4) // Throw
 			help_message = {"<span class='notice'>
-			***********************************************************</span>")
-			Left Mouse Button on turf/obj/mob      = Select</span>")
-			Right Mouse Button on turf/obj/mob     = Throw</span>")
-			***********************************************************</span>")
+			***********************************************************
+			Left Mouse Button on turf/obj/mob      = Select
+			Right Mouse Button on turf/obj/mob     = Throw
+			***********************************************************
 			</span>"}
+		if(5) // Room Build
+			help_message = {"<span class='notice'>
+			***********************************************************
+			Left Mouse Button on turf              = Select as point A
+			Right Mouse Button on turf             = Select as point B
+			Right Mouse Button on buildmode button = Change floor/wall type
+			***********************************************************
+			</span>"}
+		if(6) // Make Ladders
+			help_message = {"<span class='notice'>
+			***********************************************************
+			Left Mouse Button on turf              = Set as upper ladder loc
+			Right Mouse Button on turf             = Set as lower ladder loc
+			***********************************************************
+			</span>"}
+		if(7) // Move Into Contents
+			help_message = {"<span class='notice'>
+			***********************************************************
+			Left Mouse Button on turf/obj/mob      = Select
+			Right Mouse Button on turf/obj/mob     = Move into selection
+			***********************************************************
+			</span>"}
+		if(8) // Make Lights
+			help_message = {"<span class='notice'>
+			***********************************************************
+			Left Mouse Button on turf/obj/mob      = Make it glow
+			Right Mouse Button on turf/obj/mob     = Reset glowing
+			Right Mouse Button on buildmode button = Change glow properties
+			***********************************************************
+			</span>"}
+
 	to_chat(usr, help_message)
 	return 1
 
@@ -175,6 +206,15 @@ obj/effect/bmode/buildholder/New()
 	var/objholder = /obj/structure/closet
 	var/atom/copycat
 
+	var/wall_holder = /turf/simulated/wall
+	var/floor_holder = /turf/simulated/floor/plating
+	var/turf/coordA = null
+	var/turf/coordB = null
+
+	var/new_light_color = "#FFFFFF"
+	var/new_light_range = 3
+	var/new_light_power = 3
+
 /obj/effect/bmode/buildmode/Destroy()
 	copycat = null
 	return ..()
@@ -194,6 +234,18 @@ obj/effect/bmode/buildholder/New()
 				master.cl.buildmode = 4
 				src.icon_state = "buildmode4"
 			if(4)
+				master.cl.buildmode = 5
+				src.icon_state = "buildmode5"
+			if(5)
+				master.cl.buildmode = 6
+				src.icon_state = "buildmode6"
+			if(6)
+				master.cl.buildmode = 7
+				src.icon_state = "buildmode7"
+			if(7)
+				master.cl.buildmode = 8
+				src.icon_state = "buildmode8"
+			if(8)
 				master.cl.buildmode = 1
 				src.icon_state = "buildmode1"
 
@@ -230,6 +282,29 @@ obj/effect/bmode/buildholder/New()
 						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as obj in world
 					if("turf-reference")
 						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
+			if(5) // Room build
+				var/choice = alert("Would you like to change the floor or wall holders?","Room Builder", "Floor", "Wall")
+				switch(choice)
+					if("Floor")
+						floor_holder = easyTypeSelector(/turf/simulated/floor/plating)
+					if("Wall")
+						wall_holder = easyTypeSelector(/turf/simulated/wall)
+			if(8) // Lights
+				var/choice = alert("Change the new light range, power, or color?", "Light Maker", "Range", "Power", "Color")
+				switch(choice)
+					if("Range")
+						var/input = input("New light range.","Light Maker",3) as null|num
+						if(input)
+							new_light_range = input
+					if("Power")
+						var/input = input("New light power.","Light Maker",3) as null|num
+						if(input)
+							new_light_power = input
+					if("Color")
+						var/input = input("New light color.","Light Maker",3) as null|color
+						if(input)
+							new_light_color = input
+
 	return 1
 
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
@@ -406,7 +481,7 @@ obj/effect/bmode/buildholder/New()
 	var/list/pa = params2list(params)
 	var/turf/RT = get_turf(object)
 	switch(buildmode)
-		if(1)
+		if(1) // Basic Build
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
 				if(istype(object,/turf/space))
 					var/turf/T = object
@@ -464,7 +539,7 @@ obj/effect/bmode/buildholder/New()
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
 						WIN.dir = NORTHWEST
 
-		if(2)
+		if(2) // Adv. Build
 			if(pa.Find("ctrl") && pa.Find("shift"))
 				if(!holder)
 					return
@@ -611,7 +686,7 @@ obj/effect/bmode/buildholder/New()
 						holder.buildmode.copycat = null
 						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
 
-		if(3)
+		if(3) // Edit
 			if(pa.Find("left")) //I cant believe this shit actually compiles.
 				if(object.vars.Find(holder.buildmode.varholder))
 					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
@@ -625,7 +700,7 @@ obj/effect/bmode/buildholder/New()
 				else
 					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
 
-		if(4)
+		if(4) // Throw
 			if(pa.Find("left"))
 				if(!istype(object, /atom/movable))
 					return
@@ -635,6 +710,58 @@ obj/effect/bmode/buildholder/New()
 				if(holder.throw_atom)
 					holder.throw_atom.throw_at(object, 10, 1)
 					log_admin("[key_name(usr)] is throwing a [holder.throw_atom] at [object] - [ADMIN_JMP(RT)]")
+
+		if(5) // Room build
+			if(pa.Find("left"))
+				holder.buildmode.coordA = get_turf(object)
+				to_chat(user, "<span class='notice'>Defined [object] ([object.type]) as point A.</span>")
+			if(pa.Find("right"))
+				holder.buildmode.coordB = get_turf(object)
+				to_chat(user, "<span class='notice'>Defined [object] ([object.type]) as point B.</span>")
+			if(holder.buildmode.coordA && holder.buildmode.coordB)
+				to_chat(user, "<span class='notice'>A and B set, creating rectangle.</span>")
+				holder.buildmode.make_rectangle(
+					holder.buildmode.coordA,
+					holder.buildmode.coordB,
+					holder.buildmode.wall_holder,
+					holder.buildmode.floor_holder
+					)
+				holder.buildmode.coordA = null
+				holder.buildmode.coordB = null
+
+		if(6) // Ladders
+			if(pa.Find("left"))
+				holder.buildmode.coordA = get_turf(object)
+				to_chat(user, "<span class='notice'>Defined [object] ([object.type]) as upper ladder location.</span>")
+			if(pa.Find("right"))
+				holder.buildmode.coordB = get_turf(object)
+				to_chat(user, "<span class='notice'>Defined [object] ([object.type]) as lower ladder location.</span>")
+			if(holder.buildmode.coordA && holder.buildmode.coordB)
+				to_chat(user, "<span class='notice'>Ladder locations set, building ladders.</span>")
+				var/obj/structure/ladder/A = new /obj/structure/ladder(holder.buildmode.coordA)
+				var/obj/structure/ladder/B = new /obj/structure/ladder(holder.buildmode.coordB)
+				A.target_down = B
+				B.target_up = A
+				B.icon_state = "ladderup"
+				holder.buildmode.coordA = null
+				holder.buildmode.coordB = null
+
+		if(7) // Move into contents
+			if(pa.Find("left"))
+				if(istype(object, /atom))
+					holder.throw_atom = object
+			if(pa.Find("right"))
+				if(holder.throw_atom && istype(object, /atom/movable))
+					object.forceMove(holder.throw_atom)
+					log_admin("[key_name(usr)] moved [object] into [holder.throw_atom].")
+
+		if(8) // Lights
+			if(pa.Find("left"))
+				if(object)
+					object.set_light(holder.buildmode.new_light_range, holder.buildmode.new_light_power, holder.buildmode.new_light_color)
+			if(pa.Find("right"))
+				if(object)
+					object.reset_light()
 
 /proc/easyTypeSelector()
 	var/chosen = null
@@ -666,6 +793,54 @@ obj/effect/bmode/buildholder/New()
 		if(A.vars.Find(varname))
 			log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")
 			A.vars[varname] = initial(A.vars[varname])
+
+/obj/effect/bmode/buildmode/proc/make_rectangle(var/turf/A, var/turf/B, var/turf/wall_type, var/turf/floor_type)
+	if(!A || !B) // No coords
+		return
+	if(A.z != B.z) // Not same z-level
+		return
+
+	var/height = A.y - B.y
+	var/width = A.x - B.x
+	var/z_level = A.z
+
+	var/turf/lower_left_corner = null
+	// First, try to find the lowest part
+	var/desired_y = 0
+	if(A.y <= B.y)
+		desired_y = A.y
+	else
+		desired_y = B.y
+
+	//Now for the left-most part.
+	var/desired_x = 0
+	if(A.x <= B.x)
+		desired_x = A.x
+	else
+		desired_x = B.x
+
+	lower_left_corner = locate(desired_x, desired_y, z_level)
+
+	// Now we can begin building the actual room.  This defines the boundries for the room.
+	var/low_bound_x = lower_left_corner.x
+	var/low_bound_y = lower_left_corner.y
+
+	var/high_bound_x = lower_left_corner.x + abs(width)
+	var/high_bound_y = lower_left_corner.y + abs(height)
+
+	for(var/i = low_bound_x, i <= high_bound_x, i++)
+		for(var/j = low_bound_y, j <= high_bound_y, j++)
+			var/turf/T = locate(i, j, z_level)
+			if(i == low_bound_x || i == high_bound_x || j == low_bound_y || j == high_bound_y)
+				if(isturf(wall_type))
+					T.ChangeTurf(wall_type)
+				else
+					new wall_type(T)
+			else
+				if(isturf(floor_type))
+					T.ChangeTurf(floor_type)
+				else
+					new floor_type(T)
 
 #undef MASS_FILL
 #undef MASS_DELETE
