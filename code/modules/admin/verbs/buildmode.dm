@@ -163,9 +163,9 @@ obj/effect/bmode/buildholder/New()
 	buildmodeholders |= src
 
 /obj/effect/bmode/buildholder/Destroy()
-	..()
 	cl.screen -= list(builddir,buildhelp,buildmode,buildquit)
 	buildmodeholders -= src
+	return ..()
 
 /obj/effect/bmode/buildmode
 	icon_state = "buildmode1"
