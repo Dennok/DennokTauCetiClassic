@@ -396,7 +396,7 @@ obj/effect/bmode/buildholder/New()
 		else
 			return
 
-/proc/build_click(/mob/user, buildmode, params, /obj/object)
+/proc/build_click(mob/user, buildmode, params, obj/object)
 	var/obj/effect/bmode/buildholder/holder = null
 	for(var/obj/effect/bmode/buildholder/H in buildmodeholders)
 		if(H.cl == user.client)
