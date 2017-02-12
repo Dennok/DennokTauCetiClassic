@@ -635,7 +635,7 @@ obj/effect/bmode/buildholder/New()
 				return
 			if(pa.Find("left"))
 				if(holder.buildmode.copycat)
-					if(ispath(holder.buildmode.copycat,/turf))
+					if(isturf(holder.buildmode.copycat))
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
@@ -827,10 +827,8 @@ obj/effect/bmode/buildholder/New()
 			else
 				if(ispath(floor_type, /turf))
 					T.ChangeTurf(floor_type)
-					to_chat(usr, "[T].ChangeTurf([floor_type])")
 				else
 					new floor_type(T)
-					to_chat(usr, "Spawn new [floor_type] at [T]")
 
 #undef MASS_FILL
 #undef MASS_DELETE
