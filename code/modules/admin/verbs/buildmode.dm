@@ -105,7 +105,6 @@
 			Right Mouse Button on buildmode button = Set object type
 			Left Mouse Button on turf/obj          = Place objects
 			Middle Mouse Button                    = Copy atom
-			Middle Mouse Button                    = Copy atom
 
 			Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode
 			Ctrl+Shift+Right Mouse Button          = Sets top right corner for fill mode
@@ -232,7 +231,7 @@ obj/effect/bmode/buildholder/New()
 
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
 	return Click(object,location,control,params)
-
+/*
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
 		if(delta_y > 0)
@@ -241,7 +240,7 @@ obj/effect/bmode/buildholder/New()
 			view++
 		view = max(view,1)
 	..()
-
+*/
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)
 	if(!src.buildmode)
 		return ..()
@@ -580,9 +579,10 @@ obj/effect/bmode/buildholder/New()
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
 							A.dir = holder.builddir.dir
-							//A.light_color = holder.buildmode.copycat.light_color
+							if(holder.buildmode.copycat.light)
+								A.set_light(holder.buildmode.copycat.light_range, holder.buildmode.copycat.light_power, holder.buildmode.copycat.light_color)
 							A.appearance = holder.buildmode.copycat.appearance
-					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
+					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [ADMIN_JMP(RT)]")
 				else
 					if(isturf(holder.buildmode.objholder))
 						var/turf/T = get_turf(object)
