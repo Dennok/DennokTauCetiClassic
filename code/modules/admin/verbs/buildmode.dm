@@ -83,45 +83,54 @@
 	screen_loc = "NORTH,WEST+1"
 
 /obj/effect/bmode/buildhelp/Click()
+	var/help_message = "Wrong buildmode mode."
 	switch(master.cl.buildmode)
 		if(1)
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button + alt  = Airlock</span>")
-			to_chat(usr, "")
-			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
-		if(2)
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
-			to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
-			to_chat(usr, "")
-			to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
-			to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
+			help_message = {"<span class='notice'>
+			***********************************************************</span>")
+			Click and drag to do a fill operation</span>")
+			Left Mouse Button        = Construct / Upgrade</span>")
+			Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
+			Left Mouse Button + ctrl = R-Window</span>")
+			Left Mouse Button + alt  = Airlock</span>")
 
-			to_chat(usr, "")
-			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			Use the button in the upper left corner to</span>")
+			change the direction of built objects.</span>")
+			***********************************************************</span>")
+			</span>"}
+		if(2)
+			help_message = {"<span class='notice'>
+			***********************************************************
+			Click and drag to do a fill operation
+			Right Mouse Button on buildmode button = Set object type
+			Left Mouse Button on turf/obj          = Place objects
+			Middle Mouse Button                    = Copy atom
+			Middle Mouse Button                    = Copy atom
+
+			Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode
+			Ctrl+Shift+Right Mouse Button          = Sets top right corner for fill mode
+
+			Use the button in the upper left corner to
+			change the direction of built objects.
+			***********************************************************
+			</span>"}
 		if(3)
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			to_chat(usr, "<span class='notice'>Click and drag to do a mass edit operation</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			help_message = {"<span class='notice'>
+			***********************************************************</span>")
+			Click and drag to do a mass edit operation</span>")
+			Right Mouse Button on buildmode button = Select var(type) & value</span>")
+			Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
+			Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
+			***********************************************************</span>")
+			</span>"}
 		if(4)
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>")
-			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>")
-			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			help_message = {"<span class='notice'>
+			***********************************************************</span>")
+			Left Mouse Button on turf/obj/mob      = Select</span>")
+			Right Mouse Button on turf/obj/mob     = Throw</span>")
+			***********************************************************</span>")
+			</span>"}
+	to_chat(usr, help_message)
 	return 1
 
 /obj/effect/bmode/buildhelp/DblClick(object,location,control,params)
@@ -565,49 +574,15 @@ obj/effect/bmode/buildholder/New()
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
-							T.icon = holder.buildmode.copycat.icon
-							T.icon_state = holder.buildmode.copycat.icon_state
 							T.dir = holder.builddir.dir
-							if(holder.buildmode.copycat.overlays.len)
-								T.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									T.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								T.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									T.underlays += thing
+							T.appearance = holder.buildmode.copycat.appearance
 					else
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
 							A.dir = holder.builddir.dir
-							A.icon = holder.buildmode.copycat.icon
-							A.gender = holder.buildmode.copycat.gender
-							A.name = holder.buildmode.copycat.name
-							A.icon_state = holder.buildmode.copycat.icon_state
-							A.alpha = holder.buildmode.copycat.alpha
-							A.color = holder.buildmode.copycat.color
-							A.maptext = holder.buildmode.copycat.maptext
-							A.maptext_height = holder.buildmode.copycat.maptext_height
-							A.maptext_width = holder.buildmode.copycat.maptext_width
-							A.light_color = holder.buildmode.copycat.light_color
-							A.luminosity = holder.buildmode.copycat.luminosity
-							//A.molten = holder.buildmode.copycat.molten
-							A.pixel_x = holder.buildmode.copycat.pixel_x
-							A.pixel_y = holder.buildmode.copycat.pixel_y
-							A.invisibility = holder.buildmode.copycat.invisibility
-							if(holder.buildmode.copycat.overlays.len)
-								A.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									A.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								A.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									A.underlays += thing
-					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [ADMIN_JMP(RT)]")
+							//A.light_color = holder.buildmode.copycat.light_color
+							A.appearance = holder.buildmode.copycat.appearance
+					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(isturf(holder.buildmode.objholder))
 						var/turf/T = get_turf(object)
@@ -625,7 +600,7 @@ obj/effect/bmode/buildholder/New()
 				if(istype(object,/mob) && !check_rights(R_DEBUG,0))
 					to_chat(usr, "<span class='notice'>You don't have sufficient rights to clone [object.type]</span>")
 				else
-					if(ismob(object))
+					if(pa.Find("ctrl"))
 						holder.buildmode.copycat = object
 						to_chat(usr, "<span class='info'>You will now build a lookalike of [object] when clicking.</span>")
 					else
