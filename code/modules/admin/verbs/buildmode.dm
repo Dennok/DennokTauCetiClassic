@@ -61,21 +61,21 @@
 /obj/effect/bmode/builddir
 	icon_state = "build"
 	screen_loc = "NORTH,WEST"
-	Click()
-		switch(dir)
-			if(NORTH)
-				dir = EAST
-			if(EAST)
-				dir = SOUTH
-			if(SOUTH)
-				dir = WEST
-			if(WEST)
-				dir = NORTHWEST
-			if(NORTHWEST)
-				dir = NORTH
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/builddir/Click()
+	switch(dir)
+		if(NORTH)
+			dir = EAST
+		if(EAST)
+			dir = SOUTH
+		if(SOUTH)
+			dir = WEST
+		if(WEST)
+			dir = NORTHWEST
+		if(NORTHWEST)
+			dir = NORTH
+	return 1
+/obj/effect/bmode/builddir/DblClick(object,location,control,params)
+	return Click(object,location,control,params)
 
 /obj/effect/bmode/buildhelp
 	icon = 'icons/misc/buildmode.dmi'
@@ -140,11 +140,11 @@
 	icon_state = "buildquit"
 	screen_loc = "NORTH,WEST+3"
 
-	Click()
-		togglebuildmode(master.cl.mob)
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/buildquit/Click()
+	togglebuildmode(master.cl.mob)
+	return 1
+/obj/effect/bmode/buildquit/DblClick(object,location,control,params)
+	return Click(object,location,control,params)
 
 var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 /obj/effect/bmode/buildholder
