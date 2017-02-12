@@ -81,49 +81,51 @@
 	icon = 'icons/misc/buildmode.dmi'
 	icon_state = "buildhelp"
 	screen_loc = "NORTH,WEST+1"
-	Click()
-		switch(master.cl.buildmode)
-			if(1)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button + alt  = Airlock</span>")
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-				to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(2)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
-				to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
-				to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
 
-				to_chat(usr, "")
-				to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
-				to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(3)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Click and drag to do a mass edit operation</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-			if(4)
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>")
-				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>")
-				to_chat(usr, "<span class='notice'>***********************************************************</span>")
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/buildhelp/Click()
+	switch(master.cl.buildmode)
+		if(1)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button        = Construct / Upgrade</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button       = Deconstruct / Delete / Downgrade</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button + ctrl = R-Window</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button + alt  = Airlock</span>")
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
+			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(2)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a fill operation</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Set object type</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
+			to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
+			to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
+
+			to_chat(usr, "")
+			to_chat(usr, "<span class='notice'>Use the button in the upper left corner to</span>")
+			to_chat(usr, "<span class='notice'>change the direction of built objects.</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(3)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Click and drag to do a mass edit operation</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+		if(4)
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+			to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Select</span>")
+			to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Throw</span>")
+			to_chat(usr, "<span class='notice'>***********************************************************</span>")
+	return 1
+
+/obj/effect/bmode/buildhelp/DblClick(object,location,control,params)
+	return Click(object,location,control,params)
 
 /obj/effect/bmode/buildquit
 	icon_state = "buildquit"
@@ -194,8 +196,9 @@ obj/effect/bmode/buildholder/New()
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")
 				else
-					if(ispath(objholder,/mob) && !check_rights(R_DEBUG,0))
+					if(ismob(objholder) && !check_rights(R_DEBUG,0))
 						objholder = /obj/structure/closet
+						alert("That path is not allowed for you.")
 			if(3)
 				var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "viruses", "cuffed", "ka", "last_eaten", "urine")
 
@@ -217,6 +220,7 @@ obj/effect/bmode/buildholder/New()
 					if("turf-reference")
 						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
 	return 1
+
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
 	return Click(object,location,control,params)
 
@@ -280,15 +284,15 @@ obj/effect/bmode/buildholder/New()
 							msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
 						else
 							msglog += " FILLED [fillturfs.len] tile\s with [whatfill] "
-					msglog += "at (formatJumpTo(start)] to formatJumpTo(end)])</span>"
+					msglog += "at ([ADMIN_JMP(start)] to [ADMIN_JMP(end)])</span>"
 					message_admins(msglog)
 					log_admin(msglog)
 					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-					var/turf_op = ispath(whatfill, /turf)
+					var/turf_op = isturf(whatfill)
 					var/deletions = 0
 					for(var/turf/T in fillturfs)
 						if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-							if(ispath(chosen, /turf))
+							if(isturf(chosen))
 								T.ChangeTurf(chosen)
 								deletions++
 							else
@@ -357,13 +361,13 @@ obj/effect/bmode/buildholder/New()
 							msglog += " <big>EDITED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
 						else
 							return
-					msglog += "at (formatJumpTo(start)] to formatJumpTo(end)])</span>"
+					msglog += "at ([ADMIN_JMP(start)] to [ADMIN_JMP(end)])</span>"
 					message_admins(msglog)
 					log_admin(msglog)
 					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the mass edit may take longer than typical.</span>")
 					var/edits = 0
 					for(var/turf/T in fillturfs)
-						if(ispath(chosen, /turf))
+						if(isturf(chosen))
 							setvar(holder.buildmode.varholder, holder.buildmode.valueholder, T, reset)
 						else
 							for(var/atom/thing in T.contents)
@@ -396,42 +400,42 @@ obj/effect/bmode/buildholder/New()
 				if(istype(object,/turf/space))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
-					log_admin("[key_name(usr)] made a floor at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] made a floor at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
-					log_admin("[key_name(usr)] made a wall at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] made a wall at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
-					log_admin("[key_name(usr)] made an rwall at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] made an rwall at [ADMIN_JMP(T)]")
 					return
 			else if(pa.Find("right"))
 				if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
-					log_admin("[key_name(usr)] removed a wall at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] removed a wall at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/space)
-					log_admin("[key_name(usr)] removed flooring at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] removed flooring at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall/r_wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
-					log_admin("[key_name(usr)] downgraded an rwall at formatJumpTo(T)]")
+					log_admin("[key_name(usr)] downgraded an rwall at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/obj))
 					qdel(object)
 					return
 			else if(istype(object,/turf) && pa.Find("alt") && pa.Find("left"))
 				new/obj/machinery/door/airlock(get_turf(object))
-				log_admin("[key_name(usr)] made an airlock at formatJumpTo(RT)]")
+				log_admin("[key_name(usr)] made an airlock at [ADMIN_JMP(RT)]")
 			else if(istype(object,/turf) && pa.Find("ctrl") && pa.Find("left"))
-				log_admin("[key_name(usr)] made a window at formatJumpTo(RT)]")
+				log_admin("[key_name(usr)] made a window at [ADMIN_JMP(RT)]")
 				switch(holder.builddir.dir)
 					if(NORTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
@@ -455,10 +459,10 @@ obj/effect/bmode/buildholder/New()
 					return
 				if(pa.Find("left"))
 					holder.fill_left = RT
-					to_chat(usr, "<span class='notice'>Set bottom left fill corner to (formatJumpTo(RT)])</span>")
+					to_chat(usr, "<span class='notice'>Set bottom left fill corner to ([ADMIN_JMP(RT)])</span>")
 				else if(pa.Find("right"))
 					holder.fill_right = RT
-					to_chat(usr, "<span class='notice'>Set top right fill corner to (formatJumpTo(RT)])</span>")
+					to_chat(usr, "<span class='notice'>Set top right fill corner to ([ADMIN_JMP(RT)])</span>")
 				if(holder.fill_left && holder.fill_right)
 					var/turf/start = holder.fill_left
 					var/turf/end = holder.fill_right
@@ -501,15 +505,15 @@ obj/effect/bmode/buildholder/New()
 									msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [holder.buildmode.objholder] "
 								else
 									msglog += " FILLED [fillturfs.len] tile\s with [holder.buildmode.objholder] "
-							msglog += "at (formatJumpTo(start)] to formatJumpTo(end)])</span>"
+							msglog += "at ([ADMIN_JMP(start)] to [ADMIN_JMP(end)])</span>"
 							message_admins(msglog)
 							log_admin(msglog)
 							to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-							var/turf_op = ispath(holder.buildmode.objholder,/turf)
+							var/turf_op = isturf(holder.buildmode.objholder)
 							var/deletions = 0
 							for(var/turf/T in fillturfs)
 								if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-									if(ispath(chosen, /turf))
+									if(isturf(chosen))
 										T.ChangeTurf(chosen)
 										deletions++
 									else
@@ -603,18 +607,18 @@ obj/effect/bmode/buildholder/New()
 								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
 									var/datum/thing = holder.buildmode.copycat.underlays[i]
 									A.underlays += thing
-					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at formatJumpTo(RT)]")
+					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [ADMIN_JMP(RT)]")
 				else
-					if(ispath(holder.buildmode.objholder,/turf))
+					if(isturf(holder.buildmode.objholder))
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.objholder)
 					else
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
 							A.dir = holder.builddir.dir
-					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at formatJumpTo(RT)]")
+					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [ADMIN_JMP(RT)]")
 			else if(pa.Find("right"))
-				log_admin("[key_name(usr)] deleted a [object] at formatJumpTo(RT)]")
+				log_admin("[key_name(usr)] deleted a [object] at [ADMIN_JMP(RT)]")
 				if(isobj(object))
 					qdel(object)
 			else if(pa.Find("middle"))
@@ -646,12 +650,12 @@ obj/effect/bmode/buildholder/New()
 			if(pa.Find("left"))
 				if(!istype(object, /atom/movable))
 					return
-				log_admin("[key_name(usr)] is selecting [object] for throwing at formatJumpTo(RT)]")
+				log_admin("[key_name(usr)] is selecting [object] for throwing at [ADMIN_JMP(RT)]")
 				holder.throw_atom = object
 			if(pa.Find("right"))
 				if(holder.throw_atom)
 					holder.throw_atom.throw_at(object, 10, 1)
-					log_admin("[key_name(usr)] is throwing a [holder.throw_atom] at [object] - formatJumpTo(RT)]")
+					log_admin("[key_name(usr)] is throwing a [holder.throw_atom] at [object] - [ADMIN_JMP(RT)]")
 
 /proc/easyTypeSelector()
 	var/chosen = null
