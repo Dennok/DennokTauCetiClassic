@@ -249,6 +249,15 @@ obj/effect/bmode/buildholder/New()
 				master.cl.buildmode = 1
 				src.icon_state = "buildmode1"
 
+	else if(pa.Find("middle"))
+		var/list/modes = list("Basic Build" = 1, "Adv. Build" = 2, "Edit" = 3, "Throw" = 4, "Room Build" = 5, "Make Ladders" = 6, "Move Into Contents" = 7, "Make Lights" = 8, "Cancel" = 9)
+		var/mod = input(usr,"Select mode:" ,"Mode") in modes
+		if(mod == "Cancel")
+			return
+		var/mode = modes[mod]
+		master.cl.buildmode = mode
+		src.icon_state = "buildmode[mode]"
+
 	else if(pa.Find("right"))
 		switch(master.cl.buildmode)
 			if(1)
@@ -309,16 +318,7 @@ obj/effect/bmode/buildholder/New()
 
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
 	return Click(object,location,control,params)
-/*
-/client/MouseWheel(object,delta_x,delta_y,location,control,params)
-	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
-		if(delta_y > 0)
-			view--
-		else
-			view++
-		view = max(view,1)
-	..()
-*/
+
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)
 	if(!src.buildmode)
 		return ..()
@@ -333,6 +333,8 @@ obj/effect/bmode/buildholder/New()
 	var/turf/end = get_turf(over_location)
 	if(!start || !end)
 		return
+	if(start == end)
+		return //end.build_click()
 	switch(buildmode)
 		if(1 to 2)
 			var/list/fillturfs = block(start,end)
@@ -499,20 +501,20 @@ obj/effect/bmode/buildholder/New()
 					log_admin("[key_name(usr)] made an rwall at [ADMIN_JMP(T)]")
 					return
 			else if(pa.Find("right"))
-				if(istype(object,/turf/simulated/wall))
+				if(istype(object,/turf/simulated/wall/r_wall))
 					var/turf/T = object
-					T.ChangeTurf(/turf/simulated/floor)
-					log_admin("[key_name(usr)] removed a wall at [ADMIN_JMP(T)]")
+					T.ChangeTurf(/turf/simulated/wall)
+					log_admin("[key_name(usr)] downgraded an rwall at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/space)
 					log_admin("[key_name(usr)] removed flooring at [ADMIN_JMP(T)]")
 					return
-				else if(istype(object,/turf/simulated/wall/r_wall))
+				else if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
-					T.ChangeTurf(/turf/simulated/wall)
-					log_admin("[key_name(usr)] downgraded an rwall at [ADMIN_JMP(T)]")
+					T.ChangeTurf(/turf/simulated/floor)
+					log_admin("[key_name(usr)] removed a wall at [ADMIN_JMP(T)]")
 					return
 				else if(istype(object,/obj))
 					qdel(object)
@@ -522,22 +524,8 @@ obj/effect/bmode/buildholder/New()
 				log_admin("[key_name(usr)] made an airlock at [ADMIN_JMP(RT)]")
 			else if(istype(object,/turf) && pa.Find("ctrl") && pa.Find("left"))
 				log_admin("[key_name(usr)] made a window at [ADMIN_JMP(RT)]")
-				switch(holder.builddir.dir)
-					if(NORTH)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = NORTH
-					if(SOUTH)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = SOUTH
-					if(EAST)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = EAST
-					if(WEST)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = WEST
-					if(NORTHWEST)
-						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = NORTHWEST
+				var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
+				WIN.dir = holder.builddir.dir
 
 		if(2) // Adv. Build
 			if(pa.Find("ctrl") && pa.Find("shift"))
