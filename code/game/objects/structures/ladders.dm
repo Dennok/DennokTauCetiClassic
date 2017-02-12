@@ -8,7 +8,9 @@
 	var/obj/structure/ladder/down = null	//the ladder below this one
 	var/obj/structure/ladder/up = null		//the ladder above this one
 
-/obj/structure/ladder/New()
+/obj/structure/ladder/New(id, height)
+	if(!id)
+		return
 	spawn(8)
 		for(var/obj/structure/ladder/L in world)
 			if(L.id == id)

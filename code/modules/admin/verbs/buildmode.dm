@@ -268,7 +268,7 @@ obj/effect/bmode/buildholder/New()
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
 				else
-					if(ismob(objholder) && !check_rights(R_DEBUG,0))
+					if(ispath(objholder, /mob) && !check_rights(R_DEBUG,0))
 						objholder = /obj/structure/closet
 						alert("That path is not allowed for you.")
 			if(3)
@@ -376,11 +376,11 @@ obj/effect/bmode/buildholder/New()
 					message_admins(msglog)
 					log_admin(msglog)
 					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-					var/turf_op = isturf(whatfill)
+					var/turf_op = ispath(whatfill, /turf)
 					var/deletions = 0
 					for(var/turf/T in fillturfs)
 						if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-							if(isturf(chosen))
+							if(ispath(chosen, /turf))
 								T.ChangeTurf(chosen)
 								deletions++
 							else
@@ -455,7 +455,7 @@ obj/effect/bmode/buildholder/New()
 					to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the mass edit may take longer than typical.</span>")
 					var/edits = 0
 					for(var/turf/T in fillturfs)
-						if(isturf(chosen))
+						if(ispath(chosen, /turf))
 							setvar(holder.buildmode.varholder, holder.buildmode.valueholder, T, reset)
 						else
 							for(var/atom/thing in T.contents)
@@ -583,11 +583,11 @@ obj/effect/bmode/buildholder/New()
 							message_admins(msglog)
 							log_admin(msglog)
 							to_chat(usr, "<span class='notice'>If the server is lagging the operation will periodically sleep so the fill may take longer than typical.</span>")
-							var/turf_op = isturf(holder.buildmode.objholder)
+							var/turf_op = ispath(holder.buildmode.objholder,/turf)
 							var/deletions = 0
 							for(var/turf/T in fillturfs)
 								if(areaAction == MASS_DELETE || areaAction == SELECTIVE_DELETE)
-									if(isturf(chosen))
+									if(ispath(chosen, /turf))
 										T.ChangeTurf(chosen)
 										deletions++
 									else
@@ -635,7 +635,7 @@ obj/effect/bmode/buildholder/New()
 				return
 			if(pa.Find("left"))
 				if(holder.buildmode.copycat)
-					if(isturf(holder.buildmode.copycat))
+					if(ispath(holder.buildmode.copycat,/turf))
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
@@ -650,7 +650,7 @@ obj/effect/bmode/buildholder/New()
 							A.appearance = holder.buildmode.copycat.appearance
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [ADMIN_JMP(RT)]")
 				else
-					if(isturf(holder.buildmode.objholder))
+					if(ispath(holder.buildmode.objholder,/turf))
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.objholder)
 					else
@@ -820,15 +820,17 @@ obj/effect/bmode/buildholder/New()
 		for(var/j = low_bound_y, j <= high_bound_y, j++)
 			var/turf/T = locate(i, j, z_level)
 			if(i == low_bound_x || i == high_bound_x || j == low_bound_y || j == high_bound_y)
-				if(isturf(wall_type))
+				if(ispath(wall_type, /turf))
 					T.ChangeTurf(wall_type)
 				else
 					new wall_type(T)
 			else
-				if(isturf(floor_type))
+				if(ispath(floor_type, /turf))
 					T.ChangeTurf(floor_type)
+					to_chat(usr, "[T].ChangeTurf([floor_type])")
 				else
 					new floor_type(T)
+					to_chat(usr, "Spawn new [floor_type] at [T]")
 
 #undef MASS_FILL
 #undef MASS_DELETE
