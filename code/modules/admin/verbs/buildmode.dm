@@ -175,6 +175,10 @@ obj/effect/bmode/buildholder/New()
 	var/objholder = /obj/structure/closet
 	var/atom/copycat
 
+/obj/effect/bmode/buildmode/Destroy()
+	copycat = null
+	return ..()
+
 /obj/effect/bmode/buildmode/Click(location, control, params)
 	var/list/pa = params2list(params)
 
@@ -392,7 +396,7 @@ obj/effect/bmode/buildholder/New()
 		else
 			return
 
-/proc/build_click(var/mob/user, buildmode, params, var/obj/object)
+/proc/build_click(/mob/user, buildmode, params, /obj/object)
 	var/obj/effect/bmode/buildholder/holder = null
 	for(var/obj/effect/bmode/buildholder/H in buildmodeholders)
 		if(H.cl == user.client)
