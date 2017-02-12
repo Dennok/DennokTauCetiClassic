@@ -14,6 +14,9 @@
 
 	update_light()
 
+/atom/proc/reset_light()
+	set_light(initital(light_range), initital(light_power), initital(light_color))
+
 // Will update the light (duh).
 // Creates or destroys it if needed, makes it update values, makes sure it's got the correct source turf...
 /atom/proc/update_light()
