@@ -608,6 +608,7 @@ obj/effect/bmode/buildholder/New()
 						to_chat(usr, "<span class='info'>You will now build a lookalike of [object] when clicking.</span>")
 					else
 						holder.buildmode.objholder = object.type
+						holder.buildmode.copycat = null
 						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
 
 		if(3)
