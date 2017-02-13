@@ -131,7 +131,8 @@ What are the archived variables for?
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity_archived)
 
 /datum/gas_mixture/proc/total_moles()
-	return total_moles
+	update_values()
+	return total_moles*group_multiplier
 	/*var/moles = oxygen + carbon_dioxide + nitrogen + phoron
 
 	if(trace_gases.len)
@@ -385,23 +386,23 @@ What are the archived variables for?
 	var/datum/gas_mixture/removed = new
 
 
-	removed.oxygen = QUANTIZE((oxygen/sum)*amount)
-	removed.nitrogen = QUANTIZE((nitrogen/sum)*amount)
-	removed.carbon_dioxide = QUANTIZE((carbon_dioxide/sum)*amount)
-	removed.phoron = QUANTIZE(((phoron/sum)*amount))
+	removed.oxygen = QUANTIZE(oxygen*(amount/sum))*group_multiplier/removed.group_multiplier
+	removed.nitrogen = QUANTIZE((nitrogen*(amount/sum))*group_multiplier/removed.group_multiplier
+	removed.carbon_dioxide = QUANTIZE((carbon_dioxide*(amount/sum))*group_multiplier/removed.group_multiplier
+	removed.phoron = QUANTIZE(((phoron*(amount/sum))*group_multiplier/removed.group_multiplier
 
-	oxygen -= removed.oxygen/group_multiplier
-	nitrogen -= removed.nitrogen/group_multiplier
-	carbon_dioxide -= removed.carbon_dioxide/group_multiplier
-	phoron -= removed.phoron/group_multiplier
+	oxygen -= removed.oxygen*removed.group_multiplier/group_multiplier
+	nitrogen -= removed.nitrogen*removed.group_multiplier/group_multiplier
+	carbon_dioxide -= removed.carbon_dioxide*removed.group_multiplier/group_multiplier
+	phoron -= removed.phoron*removed.group_multiplier/group_multiplier
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
 			var/datum/gas/corresponding = new trace_gas.type()
 			removed.trace_gases += corresponding
 
-			corresponding.moles = ((trace_gas.moles/sum)*amount)
-			trace_gas.moles -= (corresponding.moles/group_multiplier)
+			corresponding.moles = ((trace_gas.moles*(amount/sum))*group_multiplier/removed.group_multiplier
+			trace_gas.moles -= (corresponding.moles*removed.group_multiplier/group_multiplier)
 
 	removed.temperature = temperature
 	update_values()
@@ -420,7 +421,9 @@ What are the archived variables for?
 
 	ratio = min(ratio, 1)
 
-	var/datum/gas_mixture/removed = new
+	return remove(total_moles() * ratio)
+
+/*	var/datum/gas_mixture/removed = new
 
 	removed.oxygen = QUANTIZE(oxygen*ratio)
 	removed.nitrogen = QUANTIZE(nitrogen*ratio)
@@ -444,7 +447,7 @@ What are the archived variables for?
 	update_values()
 	removed.update_values()
 
-	return removed
+	return removed*/
 
 /datum/gas_mixture/proc/check_then_remove(amount)
 	//Purpose: Similar to remove(...) but first checks to see if the amount of air removed is small enough
