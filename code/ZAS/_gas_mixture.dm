@@ -146,7 +146,7 @@ What are the archived variables for?
 	//Inputs: None
 	//Outputs: Gas pressure.
 
-	if(volume>0)
+	if(volume>0 && group_multiplier>0)
 		return total_moles()*R_IDEAL_GAS_EQUATION*temperature/volume/group_multiplier
 	return 0
 
