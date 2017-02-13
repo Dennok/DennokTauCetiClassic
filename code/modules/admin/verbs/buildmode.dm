@@ -215,6 +215,13 @@ obj/effect/bmode/buildholder/New()
 	var/new_light_range = 3
 	var/new_light_power = 3
 
+	var/new_mix_O2 = 20
+	var/new_mix_Co = 0
+	var/new_mix_Pl = 0
+	var/new_mix_N = 80
+	var/new_pressure = 101
+	var/new_temperature = 20
+
 /obj/effect/bmode/buildmode/Destroy()
 	copycat = null
 	return ..()
@@ -246,11 +253,14 @@ obj/effect/bmode/buildholder/New()
 				master.cl.buildmode = 8
 				src.icon_state = "buildmode8"
 			if(8)
+				master.cl.buildmode = 9
+				src.icon_state = "buildmode9"
+			if(9)
 				master.cl.buildmode = 1
 				src.icon_state = "buildmode1"
 
 	else if(pa.Find("middle"))
-		var/list/modes = list("Basic Build" = 1, "Adv. Build" = 2, "Edit" = 3, "Throw" = 4, "Room Build" = 5, "Make Ladders" = 6, "Move Into Contents" = 7, "Make Lights" = 8, "Cancel" = 9)
+		var/list/modes = list("Basic Build" = 1, "Adv. Build" = 2, "Edit" = 3, "Throw" = 4, "Room Build" = 5, "Make Ladders" = 6, "Move Into Contents" = 7, "Make Lights" = 8, "Air" = 9, "Cancel")
 		var/mod = input(usr,"Select mode:" ,"Mode") in modes
 		if(mod == "Cancel")
 			return
@@ -313,7 +323,29 @@ obj/effect/bmode/buildholder/New()
 						var/input = input("New light color.","Light Maker",3) as null|color
 						if(input)
 							new_light_color = input
-
+			if(9) // Air
+				var/choice = alert("Change the air mix, pressure, or temperature?", "Air Maker", "Mix", "Pressure", "Temperature")
+				switch(choice)
+					if("Mix")
+						var/Nitrogen = 100
+						var/inputO2 = min(input("New oxygen %. Max [Nitrogen]%","Air Maker",20) as null|num, Nitrogen)
+						Nitrogen = max(Nitrogen - inputO2, 0)
+						var/inputCo = min(input("New co2 %. Max [Nitrogen]%","Air Maker",0) as null|num, Nitrogen)
+						Nitrogen = max(Nitrogen - inputCo, 0)
+						var/inputPl = min(input("New Phoron %. Max [Nitrogen]%","Air Maker",0) as null|num, Nitrogen)
+						Nitrogen = max(Nitrogen - inputPl, 0)
+						new_mix_O2 = inputO2
+						new_mix_Co = inputCo
+						new_mix_Pl = inputPl
+						new_mix_N = Nitrogen
+					if("Pressure")
+						var/input = input("New pressure.","Air Maker",101) as null|num
+						if(input)
+							new_pressure = input
+					if("Temperature")
+						var/input = input("New temperature.","Air Maker",20) as null|num
+						if(input)
+							new_temperature = input
 	return 1
 
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
@@ -756,6 +788,49 @@ obj/effect/bmode/buildholder/New()
 				if(object)
 					object.reset_light()
 
+		if(9) // Air
+			if(object)
+				var/turf/simulated/T = get_turf(object)
+				if(!T)
+					to_chat(usr, "<span class='warning'>No turf found.</span>")
+					return
+
+				if(!T.zone)
+					to_chat(usr, "<span class='warning'>No zone found.</span>")
+					return
+
+				if(!T.zone.air)
+					to_chat(usr, "<span class='warning'>No air found.</span>")
+					return
+
+				var/datum/gas_mixture/Target = T.zone.air
+
+				if(pa.Find("left"))
+					Target.remove_ratio(100)
+
+					Target.oxygen =  holder.buildmode.new_mix_O2*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
+					Target.carbon_dioxide =  holder.buildmode.new_mix_Co*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
+					Target.nitrogen =  holder.buildmode.new_mix_N*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
+					Target.phoron =  holder.buildmode.new_mix_Pl*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
+
+					Target.temperature = holder.buildmode.new_temperature
+					Target.update_values()
+					Target.check_tile_graphic()
+
+				if(pa.Find("right"))
+					Target.remove_ratio(100)
+/*
+				total_moles = new_mix_O2*new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*new_temperature)
+
+				new_mix_O2
+				new_mix_Co
+				new_mix_Pl
+				new_mix_N
+
+				new_pressure
+
+				new_temperature
+*/
 /proc/easyTypeSelector()
 	var/chosen = null
 
