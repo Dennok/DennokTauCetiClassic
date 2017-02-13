@@ -386,10 +386,10 @@ What are the archived variables for?
 	var/datum/gas_mixture/removed = new
 
 
-	removed.oxygen = QUANTIZE(oxygen*(amount/sum))*group_multiplier/removed.group_multiplier
-	removed.nitrogen = QUANTIZE((nitrogen*(amount/sum))*group_multiplier/removed.group_multiplier
-	removed.carbon_dioxide = QUANTIZE((carbon_dioxide*(amount/sum))*group_multiplier/removed.group_multiplier
-	removed.phoron = QUANTIZE(((phoron*(amount/sum))*group_multiplier/removed.group_multiplier
+	removed.oxygen = QUANTIZE((oxygen*(amount/sum))*group_multiplier/removed.group_multiplier)
+	removed.nitrogen = QUANTIZE((nitrogen*(amount/sum))*group_multiplier/removed.group_multiplier)
+	removed.carbon_dioxide = QUANTIZE((carbon_dioxide*(amount/sum))*group_multiplier/removed.group_multiplier)
+	removed.phoron = QUANTIZE((phoron*(amount/sum))*group_multiplier/removed.group_multiplier)
 
 	oxygen -= removed.oxygen*removed.group_multiplier/group_multiplier
 	nitrogen -= removed.nitrogen*removed.group_multiplier/group_multiplier
