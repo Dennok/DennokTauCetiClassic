@@ -220,7 +220,7 @@ obj/effect/bmode/buildholder/New()
 	var/new_mix_Pl = 0
 	var/new_mix_N = 80
 	var/new_pressure = 101
-	var/new_temperature = 20
+	var/new_temperature = T20C
 
 /obj/effect/bmode/buildmode/Destroy()
 	copycat = null
@@ -343,7 +343,7 @@ obj/effect/bmode/buildholder/New()
 						if(input)
 							new_pressure = input
 					if("Temperature")
-						var/input = input("New temperature.","Air Maker",20) as null|num
+						var/input = input("New temperature in kelvin. 0C = [T0C]K.","Air Maker",20) as null|num
 						if(input)
 							new_temperature = input
 	return 1
@@ -806,19 +806,19 @@ obj/effect/bmode/buildholder/New()
 				var/datum/gas_mixture/Target = T.zone.air
 
 				if(pa.Find("left"))
-					Target.remove_ratio(100)
+					Target.remove(Target.total_moles())
 
-					Target.oxygen =  holder.buildmode.new_mix_O2*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
-					Target.carbon_dioxide =  holder.buildmode.new_mix_Co*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
-					Target.nitrogen =  holder.buildmode.new_mix_N*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
-					Target.phoron =  holder.buildmode.new_mix_Pl*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)
+					Target.oxygen =  holder.buildmode.new_mix_O2*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)/100
+					Target.carbon_dioxide =  holder.buildmode.new_mix_Co*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)/100
+					Target.nitrogen =  holder.buildmode.new_mix_N*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)/100
+					Target.phoron =  holder.buildmode.new_mix_Pl*holder.buildmode.new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*holder.buildmode.new_temperature)/100
 
 					Target.temperature = holder.buildmode.new_temperature
 					Target.update_values()
 					Target.check_tile_graphic()
 
 				if(pa.Find("right"))
-					Target.remove_ratio(100)
+					Target.remove(Target.total_moles())
 /*
 				total_moles = new_mix_O2*new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*new_temperature)
 
