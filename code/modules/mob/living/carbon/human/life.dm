@@ -391,7 +391,7 @@
 					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 				else*/
 					// Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+				breath_moles = environment.cell_moles()*BREATH_PERCENTAGE
 
 				breath = loc.remove_air(breath_moles)
 
@@ -472,7 +472,7 @@
 	if(status_flags & GODMODE)
 		return
 
-	if(!breath || (breath.total_moles() == 0) || suiciding)
+	if(!breath || (breath.cell_moles() == 0) || suiciding)
 		if(suiciding)
 			adjustOxyLoss(2)//If you are suiciding, you should die a little bit faster
 			failed_last_breath = 1
@@ -497,7 +497,7 @@
 	var/SA_sleep_min = 5
 	var/inhaled_gas_used = 0
 
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+	var/breath_pressure = (breath.cell_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
 
 	var/inhaling
 	var/exhaling
@@ -536,9 +536,9 @@
 		else
 			no_exhale = 1
 
-	var/inhale_pp = (inhaling/breath.total_moles())*breath_pressure
-	var/toxins_pp = (poison/breath.total_moles())*breath_pressure
-	var/exhaled_pp = (exhaling/breath.total_moles())*breath_pressure
+	var/inhale_pp = (inhaling/breath.cell_moles())*breath_pressure
+	var/toxins_pp = (poison/breath.cell_moles())*breath_pressure
+	var/exhaled_pp = (exhaling/breath.cell_moles())*breath_pressure
 
 	if(inhale_pp < safe_pressure_min)
 		if(prob(20))
@@ -619,7 +619,7 @@
 	// If there's some other shit in the air lets deal with it here.
 	if(breath.trace_gases.len)
 		for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-			var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
+			var/SA_pp = (SA.moles/breath.cell_moles())*breath_pressure
 
 			// Enough to make us paralysed for a bit
 			if(SA_pp > SA_para_min)
@@ -665,7 +665,7 @@
 		else
 			temp_adj /= (BODYTEMP_HEAT_DIVISOR * 5)	//don't raise temperature as much as if we were directly exposed
 
-		var/relative_density = breath.total_moles() / (MOLES_CELLSTANDARD * BREATH_PERCENTAGE)
+		var/relative_density = breath.cell_moles() / (MOLES_CELLSTANDARD * BREATH_PERCENTAGE)
 		temp_adj *= relative_density
 
 		if (temp_adj > BODYTEMP_HEATING_MAX) temp_adj = BODYTEMP_HEATING_MAX
@@ -710,7 +710,7 @@
 					temp_adj = (1-thermal_protection) * ((loc_temp - bodytemperature) / BODYTEMP_HEAT_DIVISOR)
 
 			//Use heat transfer as proportional to the gas density. However, we only care about the relative density vs standard 101 kPa/20 C air. Therefore we can use mole ratios
-			var/relative_density = environment.total_moles() / MOLES_CELLSTANDARD
+			var/relative_density = environment.cell_moles() / MOLES_CELLSTANDARD
 			temp_adj *= relative_density
 
 			if (temp_adj > BODYTEMP_HEATING_MAX) temp_adj = BODYTEMP_HEATING_MAX

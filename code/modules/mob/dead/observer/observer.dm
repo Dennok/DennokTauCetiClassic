@@ -465,7 +465,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/datum/gas_mixture/environment = usr.loc.return_air()
 
 	var/pressure = environment.return_pressure()
-	var/total_moles = environment.total_moles()
+	var/total_moles = environment.cell_moles()
 
 	to_chat(src, "<span class='danger'>Results:</span>")
 	if(abs(pressure - ONE_ATMOSPHERE) < 10)

@@ -130,6 +130,10 @@ What are the archived variables for?
 
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity_archived)
 
+/datum/gas_mixture/proc/cell_moles()
+	update_values()
+	return total_moles
+
 /datum/gas_mixture/proc/total_moles()
 	update_values()
 	return total_moles*group_multiplier

@@ -803,7 +803,7 @@ obj/effect/bmode/buildholder/New()
 					to_chat(usr, "<span class='warning'>No air found.</span>")
 					return
 
-				var/datum/gas_mixture/Target = T.zone.air
+				var/datum/gas_mixture/Target = T.return_air()
 
 				if(pa.Find("left"))
 					Target.remove(Target.total_moles())

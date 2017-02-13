@@ -91,7 +91,7 @@
 						breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 					else*/
 						// Not enough air around, take a percentage of what's there to model this properly
-					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+					breath_moles = environment.cell_moles()*BREATH_PERCENTAGE
 
 					breath = loc.remove_air(breath_moles)
 
@@ -140,10 +140,10 @@
 			return 0
 
 		var/phoron_used = 0
-		var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+		var/breath_pressure = (breath.cell_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
 
 		//Partial pressure of the phoron in our breath
-		var/Toxins_pp = (breath.phoron/breath.total_moles())*breath_pressure
+		var/Toxins_pp = (breath.phoron/breath.cell_moles())*breath_pressure
 
 		if(Toxins_pp) // Detect phoron in air
 

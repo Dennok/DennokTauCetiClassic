@@ -474,7 +474,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			var/datum/gas_mixture/environment = T.return_air()
 
 			var/pressure = environment.return_pressure()
-			var/total_moles = environment.total_moles()
+			var/total_moles = environment.cell_moles()
 
 			if (total_moles)
 				var/o2_level = environment.oxygen/total_moles
@@ -1244,7 +1244,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					to_chat(O, "\red [user] has used [src] on [bicon(icon)] [A]")
 				var/pressure = A:air_contents.return_pressure()
 
-				var/total_moles = A:air_contents.total_moles()
+				var/total_moles = A:air_contents.cell_moles()
 
 				to_chat(user, "\blue Results of analysis of [bicon(icon)]")
 				if (total_moles>0)
@@ -1273,7 +1273,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				var/obj/machinery/atmospherics/pipe/tank/T = A
 				var/pressure = T.parent.air.return_pressure()
-				var/total_moles = T.parent.air.total_moles()
+				var/total_moles = T.parent.air.cell_moles()
 
 				to_chat(user, "\blue Results of analysis of [bicon(icon)]")
 				if (total_moles>0)
