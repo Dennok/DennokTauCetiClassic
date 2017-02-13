@@ -401,7 +401,7 @@ What are the archived variables for?
 			var/datum/gas/corresponding = new trace_gas.type()
 			removed.trace_gases += corresponding
 
-			corresponding.moles = ((trace_gas.moles*(amount/sum))*group_multiplier/removed.group_multiplier
+			corresponding.moles = (trace_gas.moles*(amount/sum)*group_multiplier/removed.group_multiplier)
 			trace_gas.moles -= (corresponding.moles*removed.group_multiplier/group_multiplier)
 
 	removed.temperature = temperature
@@ -421,7 +421,8 @@ What are the archived variables for?
 
 	ratio = min(ratio, 1)
 
-	return remove(total_moles() * ratio)
+	var/sum = total_moles()
+	return remove(sum * ratio)
 
 /*	var/datum/gas_mixture/removed = new
 
