@@ -726,11 +726,16 @@ obj/effect/bmode/buildholder/New()
 				to_chat(user, "<span class='notice'>Defined [object] ([object.type]) as lower ladder location.</span>")
 			if(holder.buildmode.coordA && holder.buildmode.coordB)
 				to_chat(user, "<span class='notice'>Ladder locations set, building ladders.</span>")
-				var/obj/structure/ladder/A = new /obj/structure/ladder(holder.buildmode.coordA)
-				var/obj/structure/ladder/B = new /obj/structure/ladder(holder.buildmode.coordB)
+				var/obj/structure/ladder/A = locate(/obj/structure/ladder) in holder.buildmode.coordA
+				if(!A || A.down)
+					A = new /obj/structure/ladder(holder.buildmode.coordA)
+				var/obj/structure/ladder/B = locate(/obj/structure/ladder) in holder.buildmode.coordB
+				if(!B || B.up)
+					B = new /obj/structure/ladder(holder.buildmode.coordB)
 				A.down = B
 				B.up = A
-				B.icon_state = "ladderup"
+				A.update_icon()
+				B.update_icon()
 				holder.buildmode.coordA = null
 				holder.buildmode.coordB = null
 
