@@ -819,18 +819,7 @@ obj/effect/bmode/buildholder/New()
 
 				if(pa.Find("right"))
 					Target.remove(Target.total_moles())
-/*
-				total_moles = new_mix_O2*new_pressure*Target.volume/(R_IDEAL_GAS_EQUATION*new_temperature)
 
-				new_mix_O2
-				new_mix_Co
-				new_mix_Pl
-				new_mix_N
-
-				new_pressure
-
-				new_temperature
-*/
 /proc/easyTypeSelector()
 	var/chosen = null
 
