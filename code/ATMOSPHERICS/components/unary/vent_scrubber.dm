@@ -10,8 +10,7 @@
 
 	var/area/initial_loc
 	var/id_tag = null
-	var/frequency = 1439
-	var/datum/radio_frequency/radio_connection
+	frequency = 1439
 
 	var/on = 0
 	var/scrubbing = 1 //0 = siphoning, 1 = scrubbing
@@ -23,8 +22,6 @@
 	var/panic = 0 //is this scrubber panicked?
 
 	var/area_uid
-	var/radio_filter_out
-	var/radio_filter_in
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	initial_loc = get_area(loc)
@@ -49,7 +46,7 @@
 		icon_state = "[level == 1 && istype(loc, /turf/simulated) ? "h" : "" ]off"
 	return
 
-/obj/machinery/atmospherics/unary/vent_scrubber/proc/set_frequency(new_frequency)
+/obj/machinery/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -239,6 +236,4 @@
 	if(initial_loc)
 		initial_loc.air_scrub_info -= id_tag
 		initial_loc.air_scrub_names -= id_tag
-	if(frequency)
-		set_frequency(null)
 	return ..()
